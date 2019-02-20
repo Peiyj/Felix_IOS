@@ -35,9 +35,7 @@ UITableViewDelegate {
                 // TODO: Reload your table view data
                 let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
                 self.movies = dataDictionary["results"] as! [[String:Any]]
-                self.tableView.reloadData() 
-                print(dataDictionary)
-              
+                self.tableView.reloadData()
                 
             }
         }
@@ -65,7 +63,20 @@ UITableViewDelegate {
         cell.posterView.af_setImage(withURL: posterUrl!)
         return cell
     }
-
+    
+    override func prepare(for segue:UIStoryboardSegue, sender: Any?){
+        print("hello")
+        // find the selected movie
+        
+        let cell = sender as! UITableViewCell
+        let indexPath = tableView.indexPath(for: cell)!
+        let movie = movies[indexPath.row]
+        
+        // pass the selected movie to the detail view controller
+        let detailsViewController = segue.destination as! MovieDetailsViewController
+        detailsViewController.movie = movie
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
 
 }
 
